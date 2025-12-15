@@ -1,0 +1,66 @@
+═══════════════════════════════════════════════════════════════════════════════
+  THE SOUL OF WINTER: RUSSIAN WINTER IN NAIROBI
+  PERMANENT CLOUD DEPLOYMENT CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 1: CHOOSE YOUR HOSTING PROVIDER
+─────────────────────────────────────────────────────────────────────────────
+☐ Netlify (Recommended - Easiest, drag & drop)
+☐ GitHub Pages (Free with GitHub account)
+☐ Vercel (Automatic deployment)
+☐ Firebase Hosting (Google's free tier)
+
+STEP 2: PREPARE YOUR DEPLOYMENT PACKAGE
+─────────────────────────────────────────────────────────────────────────────
+✓ index.html (main website file)
+✓ russian_winter_nairobi_final.mp4 (video montage)
+✓ upload/ folder with:
+  ✓ 10 images (1000060876.png through 1000060827.png)
+  ✓ Audio file (Расскажи,Снегурочка[ujnEDma-_AY].mp3)
+
+STEP 3: DEPLOY TO CLOUD
+─────────────────────────────────────────────────────────────────────────────
+For Netlify:
+  1. Visit https://netlify.com
+  2. Sign up (free)
+  3. Drag & drop deployment_package folder
+  4. Wait for deployment (usually < 1 minute)
+  5. Get permanent URL
+
+For GitHub Pages:
+  1. Create GitHub account
+  2. Create repo: username.github.io
+  3. Upload all files
+  4. Enable Pages in settings
+  5. Site live at https://username.github.io
+
+STEP 4: VERIFY DEPLOYMENT
+─────────────────────────────────────────────────────────────────────────────
+☐ Website loads without errors
+☐ All 10 images display correctly
+☐ Video plays when clicked
+☐ Audio syncs with video
+☐ Animations run smoothly (60 FPS)
+☐ Responsive on mobile devices
+☐ Audio fades out at end (last 3 seconds)
+☐ No console errors in browser
+
+STEP 5: SUBMIT TO RUSSIAN EMBASSY
+─────────────────────────────────────────────────────────────────────────────
+Email: russembkenya@mid.ru
+Subject: Russian Winter in Nairobi Contest Submission - The Soul of Winter
+
+Include:
+☐ Permanent website URL
+☐ All 10 images (in upload folder)
+☐ Video montage file
+☐ Your submission narrative
+
+═══════════════════════════════════════════════════════════════════════════════
+PERMANENT DEPLOYMENT COMPLETE
+═══════════════════════════════════════════════════════════════════════════════
+
+Your website is now ready for eternal deployment.
+Share the permanent URL with the Russian Embassy.
+
+🇷🇺 The Soul of Winter in Nairobi 🇰🇪
