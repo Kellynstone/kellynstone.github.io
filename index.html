@@ -11,30 +11,27 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
-        @keyframes snowfall {
+
+        @keyframes fall {
             0% {
-                transform: translateY(-10vh) translateX(0) rotateZ(0deg) scale(1);
+                transform: translateY(-10vh) translateX(0) rotateZ(0deg);
                 opacity: 0.8;
-                will-change: transform, opacity;
-            }
-            25% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 1;
-                transform: translateY(50vh) translateX(50px) rotateZ(180deg) scale(0.95);
-            }
-            75% {
-                opacity: 1;
             }
             100% {
-                transform: translateY(100vh) translateX(100px) rotateZ(360deg) scale(0.9);
+                transform: translateY(100vh) translateX(var(--wind-drift)) rotateZ(360deg);
                 opacity: 0;
-                will-change: auto;
             }
         }
-        
+
+        @keyframes sway {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(40px);
+            }
+        }
+
         @keyframes aurora {
             0%, 100% {
                 opacity: 0.35;
@@ -45,7 +42,7 @@
                 filter: blur(70px);
             }
         }
-        
+
         @keyframes twinkle {
             0%, 100% {
                 opacity: 0.4;
@@ -56,7 +53,7 @@
                 transform: scale(1.15);
             }
         }
-        
+
         @keyframes glow {
             0%, 100% {
                 text-shadow: 0 0 15px rgba(255,255,255,0.4), 0 0 30px rgba(100,200,255,0.2), 0 0 50px rgba(0,212,255,0.1);
@@ -65,98 +62,17 @@
                 text-shadow: 0 0 30px rgba(255,255,255,0.6), 0 0 60px rgba(100,200,255,0.4), 0 0 100px rgba(0,212,255,0.2);
             }
         }
-        
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
-        }
-        
-        @keyframes shimmer {
-            0%, 100% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-        }
-        
-        @keyframes crystallize {
-            0% {
-                opacity: 0;
-                transform: scale(0);
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: scale(1);
-            }
-        }
-        
-        @keyframes pulse-glow {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(0, 212, 255, 0.2), inset 0 0 15px rgba(0, 212, 255, 0.05);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(0, 212, 255, 0.35), inset 0 0 25px rgba(0, 212, 255, 0.1);
-            }
-        }
-        
-        @keyframes dreamyFloat {
-            0%, 100% {
-                transform: translateY(0px) translateX(0px);
-                opacity: 0.6;
-            }
-            25% {
-                transform: translateY(-10px) translateX(5px);
-                opacity: 0.8;
-            }
-            50% {
-                transform: translateY(-20px) translateX(-5px);
-                opacity: 0.9;
-            }
-            75% {
-                transform: translateY(-10px) translateX(5px);
-                opacity: 0.8;
-            }
-        }
-        
+
         body {
             font-family: 'Cormorant Garamond', serif;
             background: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 20%, #0d1b2a 50%, #051a2e 80%, #0a0e27 100%);
-            color: #2a3a4a;
+            color: #E0E0E0;
             line-height: 1.7;
             position: relative;
             overflow-x: hidden;
-            cursor: crosshair;
             letter-spacing: 0.3px;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            backface-visibility: hidden;
         }
-        
-        .cursor-glow {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border: 2px solid rgba(0, 212, 255, 0.5);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3), inset 0 0 15px rgba(0, 212, 255, 0.1);
-            display: none;
-            backdrop-filter: blur(5px);
-        }
-        
-        .cursor-glow.active {
-            display: block;
-        }
-        
+
         .snowflakes {
             position: fixed;
             top: 0;
@@ -166,7 +82,7 @@
             pointer-events: none;
             z-index: 1;
         }
-        
+
         .snowflake {
             position: absolute;
             top: -10vh;
@@ -174,14 +90,13 @@
             font-size: 1.5em;
             font-family: Arial, sans-serif;
             text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(100,200,255,0.5), 0 0 30px rgba(0,212,255,0.3);
-            animation: snowfall linear infinite;
+            animation: fall linear infinite, sway ease-in-out infinite;
             z-index: 1;
             filter: drop-shadow(0 0 3px rgba(255,255,255,0.7));
             will-change: transform;
             transform: translateZ(0);
-            --wind-drift: 50px;
         }
-        
+
         .aurora-bg {
             position: fixed;
             top: 0;
@@ -195,638 +110,203 @@
                 rgba(100, 200, 255, 0.12) 65%,
                 rgba(150, 100, 255, 0.15) 85%,
                 transparent 100%);
-            animation: aurora 15s ease-in-out infinite;
-            pointer-events: none;
+            mix-blend-mode: screen;
+            animation: aurora 12s ease-in-out infinite;
             z-index: 0;
-            filter: blur(90px);
         }
-        
-        .stars {
+
+        .stars-bg {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 3s ease-in-out infinite;
-            box-shadow: 0 0 4px rgba(255,255,255,0.7);
-        }
-        
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 80px 40px;
-            position: relative;
-            z-index: 2;
-            contain: layout style paint;
-        }
-        
-        header {
-            text-align: center;
-            color: white;
-            margin-bottom: 100px;
-            padding: 100px 60px;
-            background: linear-gradient(135deg, rgba(10, 14, 39, 0.7) 0%, rgba(26, 31, 58, 0.5) 50%, rgba(10, 14, 39, 0.7) 100%);
-            border-radius: 25px;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 15px 50px rgba(0, 212, 255, 0.2), inset 0 1px 0 rgba(255,255,255,0.15);
-            position: relative;
-            overflow: hidden;
-            border: 2px solid rgba(0, 212, 255, 0.35);
-            animation: pulse-glow 5s ease-in-out infinite;
-        }
-        
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+            background: transparent;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 4s ease-in-out infinite;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
             animation: float 8s ease-in-out infinite;
         }
-        
-        header::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0,212,255,0.6), transparent);
-            animation: shimmer 4s ease-in-out infinite;
-        }
-        
+
         header h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 3.8em;
-            margin-bottom: 8px;
-            text-shadow: 0 0 25px rgba(0, 212, 255, 0.6), 0 0 50px rgba(100, 200, 255, 0.3), 0 0 80px rgba(0, 212, 255, 0.15);
-            animation: glow 4s ease-in-out infinite;
-            letter-spacing: 2px;
-            position: relative;
-            z-index: 2;
-            font-weight: 700;
-            line-height: 1.2;
+            font-size: 4em;
+            font-weight: 900;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+            animation: glow 6s ease-in-out infinite;
+            letter-spacing: 1.5px;
         }
-        
-        header .emoji-accent {
-            font-size: 1.2em;
-            margin: 0 8px;
-            display: inline-block;
-            animation: twinkle 2.5s ease-in-out infinite;
-            filter: drop-shadow(0 0 6px rgba(0,212,255,0.4));
-        }
-        
+
         header .subtitle {
-            font-family: 'Cormorant Garamond', serif;
             font-size: 1.5em;
-            color: #d0e8ff;
-            font-style: italic;
-            text-shadow: 0 0 15px rgba(0, 212, 255, 0.5), 0 0 30px rgba(100, 200, 255, 0.2);
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 2;
-            letter-spacing: 1px;
+            color: #B0C4DE;
             font-weight: 300;
-        }
-        
-        header .russian {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.8em;
-            color: #c0d9ff;
-            margin-top: 15px;
-            font-weight: 700;
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5), 0 0 40px rgba(100, 200, 255, 0.25);
-            letter-spacing: 1.5px;
-            position: relative;
-            z-index: 2;
-            animation: float 5s ease-in-out infinite;
-            line-height: 1.3;
-        }
-        
-        header .flag-container {
-            margin-top: 20px;
-            position: relative;
-            z-index: 2;
-        }
-        
-        header .flag-emoji {
-            font-size: 2em;
-            margin: 0 10px;
-            display: inline-block;
-            animation: twinkle 2.5s ease-in-out infinite;
-            filter: drop-shadow(0 0 8px rgba(0,212,255,0.5));
-        }
-        
-        .intro-section {
-            background: linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(230,245,255,0.94) 100%);
-            padding: 70px;
-            border-radius: 25px;
-            margin-bottom: 80px;
-            box-shadow: 0 20px 50px rgba(0, 212, 255, 0.2), 0 0 60px rgba(100, 200, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.35);
-            position: relative;
-            overflow: hidden;
-            animation: pulse-glow 6s ease-in-out infinite;
-        }
-        
-        .intro-section::before {
-            content: '❄️';
-            position: absolute;
-            top: 40px;
-            right: 50px;
-            font-size: 3.5em;
-            opacity: 0.05;
-            animation: dreamyFloat 8s ease-in-out infinite;
-        }
-        
-        .intro-section::after {
-            content: '❄️';
-            position: absolute;
-            bottom: 50px;
-            left: 40px;
-            font-size: 3em;
-            opacity: 0.05;
-            animation: dreamyFloat 10s ease-in-out infinite 1s;
-        }
-        
-        .intro-section h2 {
-            font-family: 'Playfair Display', serif;
-            color: #0a4a6f;
-            margin-bottom: 35px;
-            font-size: 2.1em;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.08);
-            position: relative;
-            z-index: 2;
             letter-spacing: 1px;
-            font-weight: 700;
-            line-height: 1.3;
         }
-        
-        .intro-section h2 .emoji-accent {
-            font-size: 0.9em;
-            margin: 0 6px;
+
+        .section {
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
         }
-        
-        .intro-section p {
-            color: #1a3a4a;
-            margin-bottom: 25px;
-            font-size: 1.1em;
-            line-height: 1.85;
-            position: relative;
-            z-index: 2;
-            font-weight: 400;
+
+        .section:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-5px);
         }
-        
-        .intro-section p:last-child {
-            margin-bottom: 0;
-        }
-        
-        .gallery-section {
-            margin-bottom: 100px;
-        }
-        
-        .gallery-section h2 {
+
+        h2 {
             font-family: 'Playfair Display', serif;
-            color: white;
-            text-align: center;
-            margin-bottom: 70px;
             font-size: 2.8em;
-            text-shadow: 0 0 25px rgba(0, 212, 255, 0.6), 0 0 50px rgba(100, 200, 255, 0.3), 0 0 80px rgba(0, 212, 255, 0.15);
-            animation: glow 4s ease-in-out infinite;
-            letter-spacing: 1.5px;
-            font-weight: 700;
-            line-height: 1.2;
+            color: #FFFFFF;
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+            padding-bottom: 15px;
         }
-        
-        .gallery-section h2 .emoji-accent {
-            font-size: 0.95em;
-            margin: 0 8px;
+
+        .emoji-accent {
+            display: inline-block;
+            animation: dreamyFloat 6s ease-in-out infinite;
         }
-        
+
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 40px;
-            margin-bottom: 60px;
-            contain: layout style paint;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
-        
+
         .gallery-item {
-            background: linear-gradient(135deg, rgba(255,255,255,0.97) 0%, rgba(230,245,255,0.95) 100%);
-            border-radius: 20px;
+            background: rgba(26, 31, 58, 0.7);
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2), 0 0 50px rgba(100, 200, 255, 0.1);
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1px solid rgba(0, 212, 255, 0.35);
-            position: relative;
-            animation: pulse-glow 6s ease-in-out infinite;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0, 212, 255, 0.1);
         }
-        
-        .gallery-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.12) 0%, transparent 100%);
-            z-index: 2;
-            opacity: 0;
-            transition: opacity 0.6s ease;
-        }
-        
+
         .gallery-item:hover {
-            transform: translateY(-20px) scale(1.02);
-            box-shadow: 0 30px 70px rgba(0, 212, 255, 0.3), 0 0 100px rgba(100, 200, 255, 0.15);
-            will-change: transform, box-shadow;
+            transform: scale(1.03);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
         }
-        
-        .gallery-item:hover::before {
-            opacity: 1;
-        }
-        
+
         .gallery-item img {
             width: 100%;
-            height: 300px;
+            height: 250px;
             object-fit: cover;
             display: block;
-            transition: transform 0.6s ease;
-            filter: brightness(1.02) contrast(1.03);
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            will-change: transform;
-            transform: translateZ(0);
         }
-        
-        .gallery-item:hover img {
-            transform: scale(1.06);
-            filter: brightness(1.08) contrast(1.1);
-        }
-        
+
         .gallery-item-text {
-            padding: 35px;
-            position: relative;
-            z-index: 3;
+            padding: 20px;
         }
-        
+
         .gallery-item-title {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            color: #0a4a6f;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            letter-spacing: 0.5px;
-            line-height: 1.3;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 10px;
         }
-        
+
         .gallery-item-caption {
-            font-family: 'Cormorant Garamond', serif;
-            color: #2a5a7a;
             font-size: 1em;
-            line-height: 1.75;
-            font-weight: 400;
+            color: #B0C4DE;
         }
-        
-        .video-section {
-            background: linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(230,245,255,0.94) 100%);
-            padding: 80px;
-            border-radius: 25px;
-            margin-bottom: 80px;
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 212, 255, 0.2), 0 0 60px rgba(100, 200, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.35);
-            position: relative;
-            overflow: hidden;
-            animation: pulse-glow 6s ease-in-out infinite;
-        }
-        
-        .video-section::before {
-            content: '❄️';
-            position: absolute;
-            bottom: 50px;
-            left: 50px;
-            font-size: 3em;
-            opacity: 0.05;
-            animation: dreamyFloat 10s ease-in-out infinite;
-        }
-        
-        .video-section::after {
-            content: '❄️';
-            position: absolute;
-            top: 50px;
-            right: 50px;
-            font-size: 3.5em;
-            opacity: 0.05;
-            animation: dreamyFloat 8s ease-in-out infinite 1s;
-        }
-        
-        .video-section h2 {
-            font-family: 'Playfair Display', serif;
-            color: #0a4a6f;
-            margin-bottom: 20px;
-            font-size: 2.1em;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.08);
-            position: relative;
-            z-index: 2;
-            letter-spacing: 1px;
-            font-weight: 700;
-            line-height: 1.3;
-        }
-        
-        .video-section h2 .emoji-accent {
-            font-size: 0.9em;
-            margin: 0 6px;
-        }
-        
-        .video-section > p {
-            font-family: 'Cormorant Garamond', serif;
-            color: #2a5a7a;
-            font-size: 1.1em;
-            margin-bottom: 40px;
-            position: relative;
-            z-index: 2;
-            font-weight: 400;
-        }
-        
+
         .video-container {
             position: relative;
-            width: 100%;
-            max-width: 850px;
-            margin: 0 auto;
             padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
-            border-radius: 15px;
-            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2), 0 0 50px rgba(100, 200, 255, 0.1);
-            border: 2px solid rgba(0, 212, 255, 0.35);
-            z-index: 2;
-            will-change: box-shadow;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
         }
-        
+
         .video-container video {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border-radius: 13px;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
         }
-        
-        .narrative-section {
-            background: linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(230,245,255,0.94) 100%);
-            padding: 80px;
-            border-radius: 25px;
-            margin-bottom: 80px;
-            box-shadow: 0 20px 50px rgba(0, 212, 255, 0.2), 0 0 60px rgba(100, 200, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.35);
-            position: relative;
-            overflow: hidden;
-            animation: pulse-glow 6s ease-in-out infinite;
-        }
-        
-        .narrative-section::before {
-            content: '❄️';
-            position: absolute;
-            top: 50px;
-            right: 50px;
-            font-size: 3.5em;
-            opacity: 0.05;
-            animation: dreamyFloat 8s ease-in-out infinite;
-        }
-        
-        .narrative-section::after {
-            content: '❄️';
-            position: absolute;
-            bottom: 50px;
-            left: 50px;
-            font-size: 3em;
-            opacity: 0.05;
-            animation: dreamyFloat 10s ease-in-out infinite 1s;
-        }
-        
-        .narrative-section h2 {
-            font-family: 'Playfair Display', serif;
-            color: #0a4a6f;
-            margin-bottom: 40px;
-            font-size: 2.1em;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.08);
-            position: relative;
-            z-index: 2;
-            letter-spacing: 1px;
-            font-weight: 700;
-            line-height: 1.3;
-        }
-        
-        .narrative-section h2 .emoji-accent {
-            font-size: 0.9em;
-            margin: 0 6px;
-        }
-        
+
         .narrative-section p {
-            font-family: 'Cormorant Garamond', serif;
-            color: #1a3a4a;
-            margin-bottom: 28px;
-            font-size: 1.1em;
-            text-align: justify;
-            line-height: 1.85;
-            position: relative;
-            z-index: 2;
-            font-weight: 400;
-        }
-        
-        .narrative-section p:last-child {
-            margin-bottom: 0;
-        }
-        
-        .narrative-section strong {
-            color: #0a4a6f;
-            font-weight: 600;
-        }
-        
-        .submission-info {
-            background: linear-gradient(135deg, rgba(10, 50, 100, 0.9) 0%, rgba(20, 80, 140, 0.85) 50%, rgba(10, 50, 100, 0.9) 100%);
-            color: #e0f0ff;
-            padding: 70px;
-            border-radius: 25px;
-            margin-bottom: 80px;
+            font-size: 1.2em;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 212, 255, 0.3), 0 0 100px rgba(0, 212, 255, 0.2), inset 0 1px 0 rgba(255,255,255,0.1);
-            border: 2px solid rgba(0, 212, 255, 0.5);
-            position: relative;
-            overflow: hidden;
-            animation: pulse-glow 5s ease-in-out infinite;
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+            color: #B0C4DE;
         }
-        
-        .submission-info::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0,212,255,0.1) 0%, transparent 70%);
-            animation: float 8s ease-in-out infinite;
-        }
-        
-        .submission-info h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2em;
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(0, 212, 255, 0.6), 0 2px 8px rgba(0,0,0,0.2);
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 2;
-            font-weight: 700;
-            line-height: 1.3;
-            color: #ffffff;
-        }
-        
-        .submission-info h3 .emoji-accent {
-            font-size: 0.85em;
-            margin: 0 6px;
-        }
-        
-        .submission-info p {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.05em;
-            margin-bottom: 12px;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.15);
-            position: relative;
-            z-index: 2;
-            font-weight: 400;
-            color: #d0e8ff;
-        }
-        
-        .submission-info a {
-            color: #ffffff;
-            text-decoration: underline;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
-        }
-        
-        .submission-info a:hover {
-            text-shadow: 0 0 15px rgba(0, 212, 255, 0.8), 0 0 25px rgba(255,255,255,0.6);
-            color: #ffffff;
-        }
-        
+
         footer {
             text-align: center;
-            color: #d0e8ff;
-            padding: 50px 0;
-            border-top: 2px solid rgba(0, 212, 255, 0.3);
-            margin-top: 80px;
-            position: relative;
-            z-index: 2;
+            padding: 40px 20px;
+            color: #B0C4DE;
+            font-size: 0.9em;
         }
-        
-        footer p {
-            font-family: 'Cormorant Garamond', serif;
-            margin-bottom: 12px;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
-            font-size: 1.05em;
-            letter-spacing: 0.5px;
-            font-weight: 400;
+
+        footer a {
+            color: #00D4FF;
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
-        
-        footer .flag-emoji {
-            font-size: 1.8em;
-            margin: 0 10px;
-            display: inline-block;
-            animation: twinkle 2.5s ease-in-out infinite;
-            filter: drop-shadow(0 0 8px rgba(0,212,255,0.5));
-        }
-        
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2.5em;
-            }
-            
-            header .subtitle {
-                font-size: 1.2em;
-            }
-            
-            header .russian {
-                font-size: 1.8em;
-            }
-            
-            .gallery {
-                grid-template-columns: 1fr;
-            }
-            
-            .intro-section,
-            .video-section,
-            .narrative-section {
-                padding: 50px;
-            }
-            
-            .container {
-                padding: 50px 25px;
-            }
+
+        footer a:hover {
+            color: #FFFFFF;
         }
     </style>
 </head>
 <body>
-    <div class="cursor-glow" id="cursorGlow"></div>
     <div class="aurora-bg"></div>
-    <div class="stars" id="stars"></div>
-    <div class="snowflakes" id="snowflakes"></div>
-    
+    <div class="snowflakes"></div>
+    <div class="stars-bg"></div>
+
     <div class="container">
         <header>
-            <h1>The Soul of Winter<span class="emoji-accent">❄️</span></h1>
-            <p class="subtitle">Russian Winter in Nairobi</p>
-            <p class="russian">Душа Зимы в Найроби</p>
-            <div class="flag-container">
-                <span class="flag-emoji">🇷🇺</span>
-                <span class="flag-emoji">🇰🇪</span>
-            </div>
+            <h1>The Soul of Winter</h1>
+            <p class="subtitle">A Russo-Kenyan Cultural Fusion</p>
         </header>
-        
-        <div class="intro-section">
-            <h2>Welcome to My Vision<span class="emoji-accent">✨</span></h2>
-            <p>
-                This submission celebrates the magic of Russian winter traditions arriving in the vibrant heart of Nairobi. 
-                It is a story of warmth, joy, and the beautiful fusion of two rich cultures coming together in celebration.
-            </p>
-            <p>
-                From the moment Ded Moroz and Snegurochka arrive with their noble troika sleigh, to the transformation 
-                of Nairobi's landmarks into an enchanted winter wonderland, this journey captures the spirit of festive 
-                unity and shared community.
-            </p>
-        </div>
-        
-        <div class="gallery-section">
+
+        <div class="section gallery-section">
             <h2>Visual Journey<span class="emoji-accent">❄️</span></h2>
             <div class="gallery">
                 <div class="gallery-item">
-                    <img src="1000060845.png" alt="Winter Dignity">
+                    <img src="1000060830.png" alt="The Arrival">
                     <div class="gallery-item-text">
-                        <div class="gallery-item-title">1. The Noble Crest</div>
-                        <div class="gallery-item-caption">Sovereign guardians stand before the Russian Imperial Crest, representing dignity and the foundation of cultural exchange.</div>
+                        <div class="gallery-item-title">1. The Arrival</div>
+                        <div class="gallery-item-caption">The magnificent troika sleigh carries Ded Moroz and Snegurochka over the Nairobi skyline—the moment of magical arrival.</div>
                     </div>
                 </div>
                 
                 <div class="gallery-item">
                     <img src="1000060829.png" alt="Magical Transformation">
                     <div class="gallery-item-text">
-                        <div class="gallery-item-title">2. Warmth of Welcome</div>
-                        <div class="gallery-item-caption">Two hands share a warm cup of tea—the universal symbol of hospitality and the heart of cultural connection.</div>
+                        <div class="gallery-item-title">2. Magical Transformation</div>
+                        <div class="gallery-item-caption">The KICC transforms into a majestic Ice Palace, glowing with magical light as Ded Moroz works his winter magic.</div>
                     </div>
                 </div>
                 
@@ -841,7 +321,23 @@
                 <div class="gallery-item">
                     <img src="1000060835.png" alt="Grand Celebration">
                     <div class="gallery-item-text">
-                        <div class="gallery-item-title">4. The Guardianship</div>
+                        <div class="gallery-item-title">4. Grand Celebration</div>
+                        <div class="gallery-item-caption">A magnificent gathering in snow-transformed Nairobi, with flags of both nations flying and people dancing together in unity.</div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="1000060831.png" alt="Whimsical Fusion">
+                    <div class="gallery-item-text">
+                        <div class="gallery-item-title">5. Whimsical Fusion</div>
+                        <div class="gallery-item-caption">Ded Moroz and Snegurochka with the decorated matatu and noble troika—a playful celebration of cultural blending.</div>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="1000060868.png" alt="The Guardianship">
+                    <div class="gallery-item-text">
+                        <div class="gallery-item-title">6. The Guardianship</div>
                         <div class="gallery-item-caption">Sovereign guardians stand with the noble troika sleigh, with the KICC Ice Palace in the distance—protection and blessing of the union.</div>
                     </div>
                 </div>
@@ -849,40 +345,24 @@
                 <div class="gallery-item">
                     <img src="1000060878.jpg" alt="Warmth of Welcome">
                     <div class="gallery-item-text">
-                        <div class="gallery-item-title">5. Grand Celebration</div>
-                        <div class="gallery-item-caption">A magnificent gathering in snow-transformed Nairobi, with flags of both nations flying and people dancing together in unity.</div>
-                    </div>
-                </div>
-                
-                <div class="gallery-item">
-                    <img src="1000060868.png" alt="The Guardianship">
-                    <div class="gallery-item-text">
-                        <div class="gallery-item-title">6. Winter Dignity</div>
-                        <div class="gallery-item-caption">Sovereign guardians in traditional attire stand in solemn dignity, beneath the Aurora Borealis—the magic of winter itself.</div>
-                    </div>
-                </div>
-                
-                <div class="gallery-item">
-                    <img src="1000060878.jpg" alt="Warmth of Welcome">
-                    <div class="gallery-item-text">
-                        <div class="gallery-item-title">7. Whimsical Fusion</div>
-                        <div class="gallery-item-caption">Ded Moroz and Snegurochka with the decorated matatu and noble troika—a playful celebration of cultural blending.</div>
+                        <div class="gallery-item-title">7. Warmth of Welcome</div>
+                        <div class="gallery-item-caption">Two hands share a warm cup of tea—the universal symbol of hospitality and the heart of cultural connection.</div>
                     </div>
                 </div>
                 
                 <div class="gallery-item">
                     <img src="1000060845.png" alt="Winter Dignity">
                     <div class="gallery-item-text">
-                        <div class="gallery-item-title">8. The Arrival</div>
-                        <div class="gallery-item-caption">The magnificent troika sleigh carries Ded Moroz and Snegurochka over the Nairobi skyline—the moment of magical arrival.</div>
+                        <div class="gallery-item-title">8. Winter Dignity</div>
+                        <div class="gallery-item-caption">Sovereign guardians in traditional attire stand in solemn dignity, beneath the Aurora Borealis—the magic of winter itself.</div>
                     </div>
                 </div>
                 
                 <div class="gallery-item">
                     <img src="1000060876.png" alt="The Noble Crest">
                     <div class="gallery-item-text">
-                        <div class="gallery-item-title">9. Magical Transformation</div>
-                        <div class="gallery-item-caption">The KICC transforms into a majestic Ice Palace, glowing with magical light as Ded Moroz works his winter magic.</div>
+                        <div class="gallery-item-title">9. The Noble Crest</div>
+                        <div class="gallery-item-caption">Sovereign guardians stand before the Russian Imperial Crest, representing dignity and the foundation of cultural exchange.</div>
                     </div>
                 </div>
                 
@@ -895,228 +375,110 @@
                 </div>
             </div>
         </div>
-        
-        <div class="video-section">
+
+        <div class="section video-section">
             <h2>Video Montage<span class="emoji-accent">🎬</span></h2>
             <p>A cinematic journey through the Russian Winter Tale - Nairobi Edition</p>
             <div class="video-container">
-                <video controls playsinline preload="auto" muted>
+                <video id="contestVideo" controls playsinline preload="auto">
                     <source src="russian_winter_nairobi_final.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
-            <audio id="backgroundAudio" style="display: none;" loop>
-                <source src="Расскажи,Снегурочка[ujnEDma-_AY].mp3" type="audio/mpeg">
-            </audio>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const video = document.querySelector('.video-container video');
-                    const audio = document.getElementById('backgroundAudio');
-                    
-                    if (video && audio) {
-                        audio.addEventListener('loadedmetadata', function() {
-                            const duration = audio.duration;
-                            const fadeOutStart = duration - 3;
-                            
-                            video.addEventListener('play', function() {
-                                audio.currentTime = 0;
-                                audio.volume = 1;
-                                audio.play();
-                            });
-                            
-                            video.addEventListener('pause', function() {
-                                audio.pause();
-                            });
-                            
-                            video.addEventListener('timeupdate', function() {
-                                if (Math.abs(audio.currentTime - video.currentTime) > 0.5) {
-                                    audio.currentTime = video.currentTime;
-                                }
-                                
-                                if (audio.currentTime >= fadeOutStart) {
-                                    const fadeProgress = (audio.currentTime - fadeOutStart) / 3;
-                                    audio.volume = Math.max(0, 1 - fadeProgress);
-                                } else {
-                                    audio.volume = 1;
-                                }
-                            });
-                        });
-                    }
-                });
-            </script>
+            <audio id="backgroundAudio" src="Расскажи,Снегурочка[ujnEDma-_AY].mp3" preload="auto"></audio>
         </div>
-        
-        <div class="narrative-section">
+
+        <div class="section narrative-section">
             <h2>The Story Behind My Vision<span class="emoji-accent">✨</span></h2>
-            <p>
-                <strong>What inspires me about Russian culture and winter:</strong>
-            </p>
-            <p>
-                The soul of winter is not about cold—it is about warmth, magic, and community. Russian traditions, 
-                with their beloved figures of Ded Moroz and Snegurochka, represent a force that transcends climate 
-                and geography, touching hearts across the world.
-            </p>
-            <p>
-                My vision portrays a moment where the spirit of Russian winter arrives in Nairobi not as a 
-                visitor, but as a friend bringing gifts of joy, celebration, and cultural unity. The transformation 
-                of Nairobi's landmarks into an enchanted winter wonderland is not a replacement of Kenyan identity, 
-                but a celebration of it—a beautiful fusion where both cultures meet in joy and mutual respect.
-            </p>
-            <p>
-                From the moment the troika sleigh appears on the horizon to the final blessing beneath the Aurora 
-                Borealis, this is a story of shared warmth, laughter of children, the exchange of tea, and the 
-                profound joy of community. These are the true magic of winter—the magic that knows no borders.
-            </p>
-            <p>
-                I believe that the highest forms of culture can meet and create something entirely new and beautiful. 
-                This is the soul of winter in Nairobi—a celebration of humanity, festivity, and the bonds that unite us all.
-            </p>
+            <p>My submission, titled "The Soul of Winter," celebrates the magic of Russian winter traditions arriving in Nairobi. It is a story of warmth, joy, and the beautiful fusion of two rich cultures coming together in celebration.</p>
+            <p>From the moment Ded Moroz and Snegurochka arrive with their noble troika sleigh, to the transformation of Nairobi's landmarks into an enchanted winter wonderland, this journey captures the spirit of festive unity and shared community.</p>
         </div>
-        
-        <div class="submission-info">
-            <h3>Submission Details<span class="emoji-accent">✨</span></h3>
-            <p><strong>Contest:</strong> Russian Winter in Nairobi</p>
-            <p><strong>Theme:</strong> The Soul of Winter - Russo-Kenyan Cultural Fusion</p>
-            <p><strong>Submitted to:</strong> <a href="mailto:russembkenya@mid.ru">Russian Embassy in Kenya</a></p>
-            <p><strong>Hashtag:</strong> #RussianWinterInNairobi</p>
-            <p style="margin-top: 25px; font-size: 0.95em; color: #b0d0ff; border-top: 1px solid rgba(0, 212, 255, 0.3); padding-top: 20px;">All rights reserved</p>
-        </div>
-        
+
         <footer>
-            <p>Created with joy and celebration of cultural unity</p>
-            <p><span class="flag-emoji">🇷🇺</span> Russian Winter in Nairobi <span class="flag-emoji">🇰🇪</span></p>
-            <p style="font-size: 0.95em; color: #99d7ff; margin-top: 30px;">All images and content ©MMXXV</p>
+            <p>#RussianWinterInNairobi</p>
+            <p>Created by King Brian Kellynstoneleys Luxdominiel in celebration of Russian winter traditions and Russo-Kenyan cultural unity.</p>
+            <p><a href="https://github.com/Kellynstone/Kellynstone.github.io" target="_blank">View Source on GitHub</a></p>
         </footer>
     </div>
-    
+
     <script>
-        // Cursor glow effect with requestAnimationFrame optimization
-        const cursorGlow = document.getElementById('cursorGlow');
-        let mouseX = 0;
-        let mouseY = 0;
-        let ticking = false;
-        
-        function updateCursorGlow() {
-            cursorGlow.style.left = (mouseX - 20) + 'px';
-            cursorGlow.style.top = (mouseY - 20) + 'px';
-            ticking = false;
-        }
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            cursorGlow.classList.add('active');
-            
-            if (!ticking) {
-                requestAnimationFrame(updateCursorGlow);
-                ticking = true;
-            }
-        }, { passive: true });
-        
-        document.addEventListener('mouseleave', () => {
-            cursorGlow.classList.remove('active');
-        });
-        
-        // Generate stars
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            const starCount = 100;
-            
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 70 + '%';
-                star.style.animationDuration = (Math.random() * 3 + 2.5) + 's';
-                star.style.animationDelay = Math.random() * 5 + 's';
-                starsContainer.appendChild(star);
-            }
-        }
-        
-        // Generate snowflakes with requestAnimationFrame optimization
-        function createSnowflakes() {
-            const snowflakesContainer = document.getElementById('snowflakes');
-            const snowflakeCount = 150;
-            const fragment = document.createDocumentFragment();
-            
-            for (let i = 0; i < snowflakeCount; i++) {
+        document.addEventListener('DOMContentLoaded', function() {
+            const snowflakeContainer = document.querySelector('.snowflakes');
+            const starContainer = document.querySelector('.stars-bg');
+
+            // Create Snowflakes
+            for (let i = 0; i < 50; i++) {
                 const snowflake = document.createElement('div');
-                snowflake.className = 'snowflake';
-                snowflake.textContent = '❄';
-                
-                // Physics-based positioning
-                const startX = Math.random() * 100;
-                snowflake.style.left = startX + '%';
-                
-                // Size variation creates natural falling speed variation
-                const size = Math.random() * 2.2 + 0.6;
-                const baseDuration = 30 + Math.random() * 50; // 30-80 seconds
-                const duration = baseDuration / (size * 0.7); // Larger = faster
-                
-                snowflake.style.animationDuration = duration + 's';
-                snowflake.style.animationDelay = (Math.random() * 20 - 10) + 's';
-                snowflake.style.opacity = Math.random() * 0.7 + 0.25;
-                snowflake.style.fontSize = size + 'em';
-                
-                // Wind effect
-                const windDrift = Math.random() * 120 + 30;
-                snowflake.style.setProperty('--wind-drift', windDrift + 'px');
-                
-                fragment.appendChild(snowflake);
+                snowflake.innerHTML = '❄';
+                snowflake.classList.add('snowflake');
+                snowflake.style.left = `${Math.random() * 100}vw`;
+                snowflake.style.animationDuration = `${Math.random() * 5 + 8}s, ${Math.random() * 3 + 4}s`;
+                snowflake.style.animationDelay = `${Math.random() * 5}s`;
+                snowflake.style.fontSize = `${Math.random() * 1 + 0.5}em`;
+                snowflake.style.setProperty('--wind-drift', `${Math.random() * 100 - 50}px`);
+                snowflakeContainer.appendChild(snowflake);
             }
-            
-            snowflakesContainer.appendChild(fragment);
-        }
-        
-        // Frosty scroll effect with throttled crystalline particles
-        let scrollY = 0;
-        let lastCrystalTime = 0;
-        const crystalThrottle = 100; // Throttle to 100ms
-        
-        window.addEventListener('scroll', () => {
-            scrollY = window.scrollY;
-            
-            // Throttle crystalline particle creation
-            const now = Date.now();
-            if (now - lastCrystalTime > crystalThrottle && Math.random() > 0.75) {
-                createCrystal();
-                lastCrystalTime = now;
+
+            // Create Stars
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.left = `${Math.random() * 100}%`;
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDelay = `${Math.random() * 4}s`;
+                starContainer.appendChild(star);
             }
-        }, { passive: true });
-        
-        function createCrystal() {
-            const crystal = document.createElement('div');
-            crystal.style.position = 'fixed';
-            crystal.style.left = Math.random() * 100 + '%';
-            crystal.style.top = Math.random() * 100 + '%';
-            crystal.style.width = '8px';
-            crystal.style.height = '8px';
-            crystal.style.background = 'radial-gradient(circle, rgba(0,212,255,0.7), rgba(100,200,255,0.2))';
-            crystal.style.borderRadius = '50%';
-            crystal.style.pointerEvents = 'none';
-            crystal.style.zIndex = '5';
-            crystal.style.boxShadow = '0 0 8px rgba(0,212,255,0.5)';
-            crystal.style.animation = 'crystallize 2.5s ease-out forwards';
-            
-            document.body.appendChild(crystal);
-            
-            setTimeout(() => crystal.remove(), 2500);
-        }
-        
-        // Initialize
-        createStars();
-        createSnowflakes();
-        
-        // Smooth scroll behavior
-        document.documentElement.style.scrollBehavior = 'smooth';
-        
-        // Disable animations on low-end devices
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.documentElement.style.scrollBehavior = 'auto';
-            document.querySelectorAll('[style*="animation"]').forEach(el => {
-                el.style.animation = 'none';
-            });
-        }
+
+            // Video and Audio Sync
+            const video = document.getElementById('contestVideo');
+            const audio = document.getElementById('backgroundAudio');
+
+            if (video && audio) {
+                let fadeOutInterval;
+
+                video.addEventListener('play', function() {
+                    audio.currentTime = 0;
+                    audio.volume = 1;
+                    audio.play();
+                    clearInterval(fadeOutInterval);
+                });
+
+                video.addEventListener('pause', function() {
+                    audio.pause();
+                    clearInterval(fadeOutInterval);
+                });
+
+                video.addEventListener('ended', function() {
+                    audio.pause();
+                });
+
+                video.addEventListener('timeupdate', function() {
+                    if (video.duration - video.currentTime <= 5) {
+                        if (!fadeOutInterval) {
+                            fadeOutInterval = setInterval(function() {
+                                if (audio.volume > 0.05) {
+                                    audio.volume -= 0.05;
+                                } else {
+                                    audio.volume = 0;
+                                    audio.pause();
+                                    clearInterval(fadeOutInterval);
+                                }
+                            }, 250);
+                        }
+                    } else {
+                        if (Math.abs(audio.currentTime - video.currentTime) > 0.5) {
+                            audio.currentTime = video.currentTime;
+                        }
+                        audio.volume = 1;
+                        clearInterval(fadeOutInterval);
+                        fadeOutInterval = null;
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
